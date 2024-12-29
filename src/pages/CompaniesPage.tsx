@@ -9,13 +9,13 @@ export const CompaniesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Companies</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Customers</h1>
         <button
           onClick={() => setShowForm(!showForm)}
           className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
         >
           <Plus className="w-5 h-5 mr-2" />
-          Add Company
+          Add Customer
         </button>
       </div>
 
@@ -24,7 +24,7 @@ export const CompaniesPage = () => {
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Create New Company</h2>
+                <h2 className="text-xl font-bold">Create New Customer</h2>
                 <button
                   onClick={() => setShowForm(false)}
                   className="text-gray-400 hover:text-gray-500"

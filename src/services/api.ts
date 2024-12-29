@@ -53,5 +53,10 @@ export const api = {
   updateCompany: async (id: string, data: Partial<Company>) => {
     const response = await axiosInstance.put(`/companies/${id}`, data);
     return response.data;
+  },
+
+  changeCompanyStatus: async (id: string, data: Partial<Company>) => {
+    const response = await axiosInstance.put(`/companies/changeCompanyStatus/${id}`, data);
+    return response.data;
   }
 };

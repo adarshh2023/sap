@@ -8,6 +8,7 @@ const initialUserState = {
   name: '',
   email: '',
   password: '',
+  mobile: '',
   roles: ['admin'],
   companyId: ''
 };
@@ -73,7 +74,16 @@ export const CreateUser = () => {
             onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
         </div>
-
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Mobile</label>
+          <input
+            type="tel"
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
+            value={user.mobile}
+            onChange={(e) => setUser({ ...user, mobile: e.target.value })}
+          />
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Company</label>
           <select

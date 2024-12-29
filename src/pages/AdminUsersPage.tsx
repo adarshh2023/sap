@@ -58,6 +58,9 @@ export const AdminUsersPage = () => {
                     Email
                   </th>
                   <th scope="col" className="px-6 py-4 text-left text-sm font-medium text-gray-500">
+                    Mobile
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-left text-sm font-medium text-gray-500">
                     Company
                   </th>
                   <th scope="col" className="px-6 py-4 text-left">
@@ -97,7 +100,7 @@ export const AdminUsersPage = () => {
                         <div className="flex items-center">
                           {user.profileImageUrl ? (
                             <img
-                              src={user.profileImageUrl}
+                              src={"http://localhost:5001"+user.profileImageUrl}
                               alt={user.name}
                               className="h-10 w-10 rounded-full object-cover"
                             />
@@ -116,6 +119,9 @@ export const AdminUsersPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{user.email}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{user.mobile || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{user.companyId?.name || 'N/A'}</div>

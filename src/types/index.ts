@@ -20,16 +20,9 @@ export interface Company {
   activeFlag: boolean;
   ipAddress: string;
   deviceId: string;
+  userCount?: number;
   insertedBy?: string;
   updatedBy?: string;
   createdAt?: string;
   updatedAt?: string;
-}
-
-export interface User {
-  name: string;
-  email: string;
-  password: string;
-  roles: string[];
-  companyId: string;
 }

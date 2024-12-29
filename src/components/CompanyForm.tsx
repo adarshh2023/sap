@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { Upload } from 'lucide-react';
 import { api } from '../services/api';
 import { Company } from '../types';
 
@@ -10,7 +11,6 @@ interface CompanyFormProps {
 
 const initialCompanyState: Partial<Company> = {
   name: '',
-  logoUrl: '',
   contactDetails: {
     email: '',
     phone: '',
@@ -33,14 +33,20 @@ const initialCompanyState: Partial<Company> = {
 
 export const CompanyForm: React.FC<CompanyFormProps> = ({ onSuccess }) => {
   const [company, setCompany] = useState<Partial<Company>>(initialCompanyState);
-
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+
   const mutation = useMutation({
-    mutationFn: api.createCompany,
+    mutationFn: async (data: FormData) => {
+      const response = await api.createCompany(data);
+      return response;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['companies'] });
       toast.success('Company created successfully');
-      setCompany(initialCompanyState); // Reset form after successful submission
+      setCompany(initialCompanyState);
+      setSelectedFile(null);
       onSuccess?.();
     },
     onError: (error: any) => {
@@ -50,7 +56,28 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ onSuccess }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate(company as Company);
+    const formData = new FormData();
+    
+    // Add file if selected
+    if (selectedFile) {
+      formData.append('file', selectedFile);
+    }
+
+    // Add company data
+    formData.append('name', company.name || '');
+    formData.append('contactDetails', JSON.stringify(company.contactDetails));
+    formData.append('settings', JSON.stringify(company.settings));
+    formData.append('activeFlag', String(company.activeFlag));
+    formData.append('ipAddress', company.ipAddress || '');
+    formData.append('deviceId', company.deviceId || '');
+
+    mutation.mutate(formData);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
   };
 
   return (
@@ -68,14 +95,29 @@ export const CompanyForm: React.FC<CompanyFormProps> = ({ onSuccess }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Logo URL</label>
-          <input
-            type="url"
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-yellow-500 focus:ring-yellow-500"
-            value={company.logoUrl}
-            onChange={(e) => setCompany({ ...company, logoUrl: e.target.value })}
-          />
+          <label className="block text-sm font-medium text-gray-700">Company Logo</label>
+          <div className="mt-1 flex items-center">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*"
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+            >
+              <Upload className="w-5 h-5 mr-2" />
+              {selectedFile ? 'Change Logo' : 'Upload Logo'}
+            </button>
+            {selectedFile && (
+              <span className="ml-3 text-sm text-gray-500">
+                {selectedFile.name}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
