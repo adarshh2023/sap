@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between h-16 px-4 border-b">
           <div className="flex items-center">
             <PuzzleIcon className="w-8 h-8 text-yellow-500" />
-            <span className="ml-2 text-xl font-bold">Admin Panel</span>
+            <span className="ml-2 text-xl font-bold">Super Admin</span>
           </div>
           <button
             onClick={onClose}

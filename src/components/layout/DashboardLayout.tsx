@@ -10,12 +10,12 @@ export const DashboardLayout = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-yellow-50 flex">
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
-      {/* Mobile header */}
+      {/* Mobile header with animation */}
       <motion.div 
         className="lg:hidden fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-sm py-4 px-4 z-10"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ type: "spring", stiffness: 100 }}
       >
         <button
           onClick={() => setIsSidebarOpen(true)}
@@ -31,9 +31,9 @@ export const DashboardLayout = () => {
         <AnimatePresence mode="wait">
           <motion.main 
             key={window.location.pathname}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
             className="p-4 sm:p-6 lg:p-8"
           >

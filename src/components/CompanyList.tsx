@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Pencil, Upload } from 'lucide-react';
+import { Pencil } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { api } from '../services/api';
 import { Company } from '../types';
 import { EditCompanyModal } from './EditCompanyModal';
@@ -28,9 +29,6 @@ export const CompanyList = () => {
     }
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading companies</div>;
-
   return (
     <>
       <div className="overflow-x-auto">
@@ -46,70 +44,86 @@ export const CompanyList = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {companies?.map((company: Company) => (
-              <tr key={company._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      {company.logoUrl ? (
-                        <img 
-                          className="h-10 w-10 rounded-full object-cover" 
-                          src={"http://localhost:5001"+company.logoUrl} 
-                          alt={company.name} 
-                        />
-                      ) : (
-                        <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                          <span className="text-yellow-600 font-medium">
-                            {company.name.charAt(0)}
-                          </span>
-                        </div>
-                      )}
+            <AnimatePresence>
+              {companies?.map((company: Company, index: number) => (
+                <motion.tr 
+                  key={company._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="hover:bg-gray-50"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <motion.div 
+                        className="flex-shrink-0 h-10 w-10"
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        {company.logoUrl ? (
+                          <img 
+                            className="h-10 w-10 rounded-full object-cover" 
+                            src={"http://localhost:5001"+company.logoUrl} 
+                            alt={company.name} 
+                          />
+                        ) : (
+                          <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                            <span className="text-yellow-600 font-medium">
+                              {company.name.charAt(0)}
+                            </span>
+                          </div>
+                        )}
+                      </motion.div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">{company.name}</div>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{company.name}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{company.contactDetails.email}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{company.contactDetails.phone}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{company.userCount || 0}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <Toggle
-                    checked={company.activeFlag}
-                    onChange={(checked) => 
-                      toggleMutation.mutate({ id: company._id!, activeFlag: checked })
-                    }
-                    disabled={toggleMutation.isPending}
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right">
-                  <button
-                    onClick={() => setSelectedCompany(company)}
-                    className="inline-flex items-center px-3 py-1.5 border border-yellow-500 text-xs font-medium rounded-md text-yellow-600 bg-white hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                  >
-                    <Pencil className="w-4 h-4 mr-1" />
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{company.contactDetails.email}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{company.contactDetails.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{company.userCount || 0}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Toggle
+                      checked={company.activeFlag}
+                      onChange={(checked) => 
+                        toggleMutation.mutate({ id: company._id!, activeFlag: checked })
+                      }
+                      disabled={toggleMutation.isPending}
+                    />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedCompany(company)}
+                      className="inline-flex items-center px-3 py-1.5 border border-yellow-500 text-xs font-medium rounded-md text-yellow-600 bg-white hover:bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                    >
+                      <Pencil className="w-4 h-4 mr-1" />
+                      Edit
+                    </motion.button>
+                  </td>
+                </motion.tr>
+              ))}
+            </AnimatePresence>
           </tbody>
         </table>
       </div>
 
-      {selectedCompany && (
-        <EditCompanyModal
-          company={selectedCompany}
-          isOpen={!!selectedCompany}
-          onClose={() => setSelectedCompany(null)}
-        />
-      )}
+      <AnimatePresence>
+        {selectedCompany && (
+          <EditCompanyModal
+            company={selectedCompany}
+            isOpen={!!selectedCompany}
+            onClose={() => setSelectedCompany(null)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };
