@@ -100,7 +100,7 @@ export const AdminUsersPage = () => {
                         <div className="flex items-center">
                           {user.profileImageUrl ? (
                             <img
-                              src={"http://localhost:5001"+user.profileImageUrl}
+                              src={"http://103.120.178.99:5001"+user.profileImageUrl}
                               alt={user.name}
                               className="h-10 w-10 rounded-full object-cover"
                             />
@@ -151,7 +151,6 @@ export const AdminUsersPage = () => {
           </div>
         </div>
       </div>
-
       {selectedUser && (
         <EditAdminModal
           user={selectedUser}

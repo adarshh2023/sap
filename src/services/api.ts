@@ -3,7 +3,7 @@ import { Company, User } from '../types';
 import { LoginCredentials, AuthResponse } from '../types/auth';
 import { storage } from './storage';
 
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = 'http://103.120.178.99:5001/api';
 
 // Create axios instance with base configuration
 const axiosInstance = axios.create({

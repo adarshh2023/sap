@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Image as ImageIcon } from 'lucide-react';
 
@@ -13,6 +13,15 @@ export const CompanyLogoUpload: React.FC<CompanyLogoUploadProps> = ({
   onFileSelect,
   inputRef
 }) => {
+  const [previewUrl, setPreviewUrl] = useState<string>(logoUrl);
+
+  const handleFileSelect = (file: File) => {
+    // Create a temporary URL for the selected file
+    const tempUrl = URL.createObjectURL(file);
+    setPreviewUrl(tempUrl);
+    onFileSelect(file);
+  };
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -23,9 +32,18 @@ export const CompanyLogoUpload: React.FC<CompanyLogoUploadProps> = ({
     e.stopPropagation();
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
-      onFileSelect(file);
+      handleFileSelect(file);
     }
   };
+
+  // Cleanup the temporary URL when component unmounts
+  React.useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl !== logoUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl, logoUrl]);
 
   return (
     <div className="space-y-2">
@@ -40,7 +58,7 @@ export const CompanyLogoUpload: React.FC<CompanyLogoUploadProps> = ({
           ref={inputRef}
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) onFileSelect(file);
+            if (file) handleFileSelect(file);
           }}
           accept="image/*"
           className="hidden"
@@ -51,9 +69,9 @@ export const CompanyLogoUpload: React.FC<CompanyLogoUploadProps> = ({
           onDrop={handleDrop}
           className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-yellow-500 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
         >
-          {logoUrl ? (
+          {previewUrl ? (
             <img
-              src={logoUrl}
+              src={previewUrl}
               alt="Company logo preview"
               className="w-20 h-20 rounded-full object-cover"
             />

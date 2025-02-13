@@ -54,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             }
           >
             <Building2 className="w-5 h-5 mr-3" />
-            Companies
+            Customers
           </NavLink>
 
           <NavLink
@@ -69,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             }
           >
             <UserPlus className="w-5 h-5 mr-3" />
-            Create User
+            Create Admin User
           </NavLink>
 
           <NavLink

@@ -81,7 +81,7 @@ export const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, isO
             <div className="mt-1 flex items-center space-x-4">
               {company.logoUrl && !selectedFile && (
                 <img
-                  src={"http://localhost:5001"+company.logoUrl}
+                  src={"http://103.120.178.99:5001"+company.logoUrl}
                   alt={company.name}
                   className="h-12 w-12 rounded-full object-cover"
                 />

@@ -110,7 +110,7 @@ export const CreateUserForm = () => {
           type="mobile"
           icon={<Phone className="w-5 h-5" />}
           value={user.mobile}
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
+          onChange={(e) => setUser({ ...user, mobile: e.target.value })}
           placeholder="Enter Mobile"
           error={errors.mobile}
           required
